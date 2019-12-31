@@ -71,9 +71,7 @@ function teleportRandom(sender, args) {
             Location.add(0, -1, 0);
           }
           if (player.hasPermission("rtp.super") || player.hasPermission("*")) {
-            player.sendMessage(
-              "[RTP] \u00a7eThere you go !"
-            );
+            player.sendMessage("[RTP] \u00a7eThere you go !");
           } else {
             player.sendMessage(
               "[RTP] \u00a7eThere you go ! \u00a77\u00a7o( 24 hours cooldown )"
@@ -95,14 +93,24 @@ function teleportRandom(sender, args) {
 
 function addPlayerEntry(player) {
   var File = manager.getFile("RTP", "user.json");
-  var docs = JSON.parse(manager.readFile(File));
+  var docs = manager.readFile(File);
   docs[player] = "" + new Date();
+  if (docs.length > 0) {
+    docs = JSON.parse(docs);
+  } else {
+    docs = {}
+  }
   manager.writeToFile(File, JSON.stringify(docs));
 }
 
 function checkPlayerEntry(player) {
   var File = manager.getFile("RTP", "user.json");
-  var docs = JSON.parse(manager.readFile(File));
+  var docs = manager.readFile(File);
+  if (docs.length > 0) {
+    docs = JSON.parse(docs);
+  } else {
+    docs = {}
+  }
   if (docs[player]) {
     //We have the player entry in !
 
