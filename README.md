@@ -1,11 +1,9 @@
-# RandomTp---Drupi
-random.png
-RandomTp (Drupi)
-​
+# RandomTp (Drupi)
+
 A simple Drupi random teleport plugin
 Still in development*
 
-Introduction :
+## Introduction :
 
 Have you ever gotten so bored on minecraft you could watch you'r diamonds being trown in lava ?
 Well freet no more !
@@ -23,12 +21,12 @@ With random tp you could get to the schetchiest locations on the map.
 Command cooldown for default user is 24 hours and its not configurable.
 A config which will let you change this along with the teleport radius will be added in the nearest future
 
-Permisions :
+## Permisions :
 
 rtp.use // acess to "/rtp" command
 rtp.super // acess to "/rtp" command without restrictions
 
-Requirements :
+## Requirements :
 
 Drupi : https://www.spigotmc.org/resources/drupi.65706/
 
@@ -37,4 +35,4 @@ Drupi : https://www.spigotmc.org/resources/drupi.65706/
 Once you have Drupi in you'r server's plugin folder, it's config folder will be created.
 Paste the .js file inside Drupi/scripts/modules then run /drupi reload on the server.
 
-Enjoy !
+## Enjoy !
