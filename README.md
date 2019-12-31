@@ -23,14 +23,14 @@ A config which will let you change this along with the teleport radius will be a
 
 ## Permisions :
 
-rtp.use // acess to "/rtp" command
-rtp.super // acess to "/rtp" command without restrictions
+- rtp.use // acess to "/rtp" command
+- rtp.super // acess to "/rtp" command without restrictions
 
 ## Requirements :
 
 Drupi : https://www.spigotmc.org/resources/drupi.65706/
 
-( Drupi is a plugin that allows anyone to customize their Minecraft server using simple scripts written in JavaScript. The possibilities for what you can do with Drupi are near limitless )
+( [Drupi](https://www.spigotmc.org/resources/drupi.65706/) is a plugin that allows anyone to customize their Minecraft server using simple scripts written in JavaScript. The possibilities for what you can do with Drupi are near limitless )
 
 Once you have Drupi in you'r server's plugin folder, it's config folder will be created.
 Paste the .js file inside Drupi/scripts/modules then run /drupi reload on the server.
