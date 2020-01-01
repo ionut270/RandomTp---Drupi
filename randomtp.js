@@ -1,9 +1,58 @@
 command.create(
   "rtp",
-  "Some prefix",
+  "I don't know what this prefix should be .",
   "Random teleport troughout the whole map !",
   teleportRandom
 );
+
+
+console.log("===============EnderXking===============")
+console.log("      ___                       ___   ")
+console.log("     /  /\\          ___        /  /\\  ")
+console.log("    /  /::\\        /  /\\      /  /::\\ ")
+console.log("   /  /:/\\:\\      /  /:/     /  /:/\\:\\")
+console.log("  /  /:/~/:/     /  /:/     /  /:/~/:/")
+console.log(" /__/:/ /:/___  /  /::\\    /__/:/ /:/ ")
+console.log(" \\  \\:\\/:::::/ /__/:/\\:\\   \\  \\:\\/:/  ")
+console.log("  \\  \\::/~~~~  \\__\\/  \\:\\   \\  \\::/   ")
+console.log("   \\  \\:\\           \\  \\:\\   \\  \\:\\   ")
+console.log("    \\  \\:\\           \\__\\/    \\  \\:\\  ")
+console.log("     \\__\\/                     \\__\\/")
+console.log("=============RTP BY Ionut.E=============")
+
+
+//config initialization
+var config_File = manager.getFile("RTP", "config.json");
+var config = manager.readFile(config_File);
+
+if (config === "") {
+  config = {
+    radius: {
+      _comment:
+        "Radius around the center_point at which you can be teleported. Sugested maximum is 29000000 which is 1000000 blocks less then the world border.",
+      value: 29000000
+    },
+    cooldown: {
+      _comment: [
+        "Player cooldown for this command in miliseconds. Mathematic expresions such as 60*60 are allowed. MUST BE A STRING VALUE",
+        "The default value is 24 hours"
+      ],
+      value: "60*60*24*1000"
+    },
+    center_point: {
+      _comment:
+        "The center point from which the player should be teleported away from",
+      value: { x: 0, z: 0 }
+    }
+  };
+  manager.writeToFile(
+    config_File,
+    JSON.stringify(config)
+  );
+} else {
+  config = JSON.parse(config);
+}
+console.log("[RTP] Config handled !")
 
 function teleportRandom(sender, args) {
   //global initializaion
@@ -17,17 +66,30 @@ function teleportRandom(sender, args) {
     player.hasPermission("rtp.super")
   ) {
     //Config *
-    var cooldown = checkPlayerEntry(player);
+    var cooldown = checkPlayerEntry(player, eval(config.cooldown.value));
 
     if (
       cooldown === false ||
       player.hasPermission("*") ||
       player.hasPermission("rtp.super")
     ) {
+      console.log("[RTP] Player " + player.name + " teleported sucesfully !")
+      // console.log(
+      //   "[RTP] ONE OF THEM WAS SUCESGULL > " +
+      //     cooldown +
+      //     " + " +
+      //     player.hasPermission("*") +
+      //     " + " +
+      //     player.hasPermission("rtp.super")
+      // );
       const x =
-        Math.floor(Math.random() * 29000000) * (Math.random() < 0.5 ? -1 : 1);
+        Math.floor(Math.random() * config.radius.value) *
+          (Math.random() < 0.5 ? -1 : 1) +
+        config.center_point.value.x;
       const z =
-        Math.floor(Math.random() * 29000000) * (Math.random() < 0.5 ? -1 : 1);
+        Math.floor(Math.random() * config.radius.value) *
+          (Math.random() < 0.5 ? -1 : 1) +
+        config.center_point.value.z;
       var Location = manager.newLocationWorld(world, x, 60, z);
 
       //Then check if the block at which I'm trying to teleport is safe
@@ -82,11 +144,13 @@ function teleportRandom(sender, args) {
         }, 20 * 5);
       }
     } else {
+      console.log("[RTP] Player " + player.name + " tried to teleport but has cooldown " + cooldown)
       player.sendMessage(
         "[RTP] \u00a7cYou can execute thic command again in " + cooldown
       );
     }
   } else {
+    console.log("[RTP] Player " + player.name + " tried to teleport without acess !")
     player.sendMessage("\u00A7cYou don't have acess to this command !");
   }
 }
@@ -94,35 +158,55 @@ function teleportRandom(sender, args) {
 function addPlayerEntry(player) {
   var File = manager.getFile("RTP", "user.json");
   var docs = manager.readFile(File);
-  docs[player] = "" + new Date();
+
   if (docs.length > 0) {
     docs = JSON.parse(docs);
   } else {
-    docs = {}
+    docs = {};
   }
+
+  docs[player] = "" + new Date();
+
+  // console.log("ADDING PLAYER ENTRY !!! > " + JSON.stringify(docs));
   manager.writeToFile(File, JSON.stringify(docs));
 }
 
-function checkPlayerEntry(player) {
+function checkPlayerEntry(player, cfg_cooldown) {
+  // console.log("[RTP] Looking up for player entry !");
   var File = manager.getFile("RTP", "user.json");
   var docs = manager.readFile(File);
   if (docs.length > 0) {
     docs = JSON.parse(docs);
   } else {
-    docs = {}
+    docs = {};
   }
   if (docs[player]) {
+    // console.log("[RTP] Player entry found !");
     //We have the player entry in !
 
     var cooldown = new Date(docs[player]);
-    cooldown.setDate(cooldown.getDate() + 1);
+    // console.log(
+    //   "[RTP] > Calculating cooldown value > " +
+    //     eval(cooldown.getTime()) +
+    //     " + < CFG DATA >" +
+    //     cfg_cooldown
+    // );
+    cooldown = eval(cooldown.getTime()) + cfg_cooldown;
+    //console.log("[RTP] > COOLDOWN RES === " + cooldown);
+    cooldown = new Date(cooldown);
+
     if (eval(cooldown - new Date()) < 0) {
+      //console.log("[RTP] > No cooldown left > " + cooldown);
       addPlayerEntry(player);
       return false;
     } else {
+      // console.log(
+      //   "[RTP] COOLDOWN ! > " + cooldown + " < - NEW DATE > " + new Date()
+      // );
       return TimeCounter((cooldown - new Date()) / 1000);
     }
   } else {
+    //console.log("[RTP] > No player entry !");
     addPlayerEntry(player);
     return false;
     //logged to the cooldown
@@ -130,9 +214,9 @@ function checkPlayerEntry(player) {
 }
 
 function TimeCounter(time) {
+  //console.log("[RTP] > TRANSLATING COOLDOWN > " + time);
   var content = "";
-  var tx = time;
-  var t = parseInt(tx);
+  var t = parseInt(time);
   var days = parseInt(t / 86400);
   t = t - days * 86400;
   var hours = parseInt(t / 3600);
@@ -145,5 +229,6 @@ function TimeCounter(time) {
     content += hours + " hours, ";
   }
   content += minutes + " minutes and " + t + " seconds.";
+  //console.log("[RTP] COOLDOWN LEFGT RESULT  > " + content);
   return content;
 }
