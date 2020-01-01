@@ -5,21 +5,19 @@ command.create(
   teleportRandom
 );
 
-
-console.log("===============EnderXking===============")
-console.log("      ___                       ___   ")
-console.log("     /  /\\          ___        /  /\\  ")
-console.log("    /  /::\\        /  /\\      /  /::\\ ")
-console.log("   /  /:/\\:\\      /  /:/     /  /:/\\:\\")
-console.log("  /  /:/~/:/     /  /:/     /  /:/~/:/")
-console.log(" /__/:/ /:/___  /  /::\\    /__/:/ /:/ ")
-console.log(" \\  \\:\\/:::::/ /__/:/\\:\\   \\  \\:\\/:/  ")
-console.log("  \\  \\::/~~~~  \\__\\/  \\:\\   \\  \\::/   ")
-console.log("   \\  \\:\\           \\  \\:\\   \\  \\:\\   ")
-console.log("    \\  \\:\\           \\__\\/    \\  \\:\\  ")
-console.log("     \\__\\/                     \\__\\/")
-console.log("=============RTP BY Ionut.E=============")
-
+console.log("===============EnderXking===============");
+console.log("      ___                       ___   ");
+console.log("     /  /\\          ___        /  /\\  ");
+console.log("    /  /::\\        /  /\\      /  /::\\ ");
+console.log("   /  /:/\\:\\      /  /:/     /  /:/\\:\\");
+console.log("  /  /:/~/:/     /  /:/     /  /:/~/:/");
+console.log(" /__/:/ /:/___  /  /::\\    /__/:/ /:/ ");
+console.log(" \\  \\:\\/:::::/ /__/:/\\:\\   \\  \\:\\/:/  ");
+console.log("  \\  \\::/~~~~  \\__\\/  \\:\\   \\  \\::/   ");
+console.log("   \\  \\:\\           \\  \\:\\   \\  \\:\\   ");
+console.log("    \\  \\:\\           \\__\\/    \\  \\:\\  ");
+console.log("     \\__\\/                     \\__\\/");
+console.log("=============RTP BY Ionut.E=============");
 
 //config initialization
 var config_File = manager.getFile("RTP", "config.json");
@@ -45,14 +43,13 @@ if (config === "") {
       value: { x: 0, z: 0 }
     }
   };
-  manager.writeToFile(
-    config_File,
-    JSON.stringify(config)
-  );
+  manager.writeToFile(config_File, JSON.stringify(config));
 } else {
   config = JSON.parse(config);
 }
-console.log("[RTP] Config handled !")
+console.log("[RTP] Config handled !");
+
+var timer;
 
 function teleportRandom(sender, args) {
   //global initializaion
@@ -73,7 +70,11 @@ function teleportRandom(sender, args) {
       player.hasPermission("*") ||
       player.hasPermission("rtp.super")
     ) {
-      console.log("[RTP] Player " + player.name + " teleported sucesfully !")
+      console.log(
+        "[RTP] Player " +
+          player.name +
+          " tries to teleport > Finding chunk ... !"
+      );
       // console.log(
       //   "[RTP] ONE OF THEM WAS SUCESGULL > " +
       //     cooldown +
@@ -107,7 +108,20 @@ function teleportRandom(sender, args) {
           Location.add(1000, 0, 0);
         } else {
           unsafeBelow = false;
+          console.log(
+            "[RTP] Player " +
+              player.name +
+              " teleport chunk found loading chunk ... "
+          );
+          timer = new Date();
           Location.getChunk().load();
+          timer = new Date() - timer;
+          console.log(
+            "[RTP] Player " +
+              player.name +
+              " teleport Loading chunk took " +
+              TimeCounter(parseInt(timer))
+          );
         }
 
         if (!unsafeBelow) {
@@ -118,7 +132,6 @@ function teleportRandom(sender, args) {
       }
 
       if (!unsafeAbove && !unsafeBelow) {
-        5;
         player.sendMessage("[RTP] \u00a77\u00a7oLoading chunk ...");
 
         //An idea was to tp the player up above the loafing chunk, and after we think its loaded to tp the player below
@@ -144,13 +157,20 @@ function teleportRandom(sender, args) {
         }, 20 * 5);
       }
     } else {
-      console.log("[RTP] Player " + player.name + " tried to teleport but has cooldown " + cooldown)
+      console.log(
+        "[RTP] Player " +
+          player.name +
+          " tried to teleport but has cooldown " +
+          cooldown
+      );
       player.sendMessage(
         "[RTP] \u00a7cYou can execute thic command again in " + cooldown
       );
     }
   } else {
-    console.log("[RTP] Player " + player.name + " tried to teleport without acess !")
+    console.log(
+      "[RTP] Player " + player.name + " tried to teleport without acess !"
+    );
     player.sendMessage("\u00A7cYou don't have acess to this command !");
   }
 }
