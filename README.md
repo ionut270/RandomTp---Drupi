@@ -5,7 +5,6 @@
 # RandomTp (Drupi)
 
 A simple Drupi random teleport plugin
-Still in development*
 
 ## Introduction :
 
