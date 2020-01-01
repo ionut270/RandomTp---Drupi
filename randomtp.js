@@ -113,15 +113,8 @@ function teleportRandom(sender, args) {
               player.name +
               " teleport chunk found loading chunk ... "
           );
-          timer = new Date();
+          timer = new Date().getTime();
           Location.getChunk().load();
-          timer = new Date() - timer;
-          console.log(
-            "[RTP] Player " +
-              player.name +
-              " teleport Loading chunk took " +
-              TimeCounter(parseInt(timer))
-          );
         }
 
         if (!unsafeBelow) {
@@ -154,6 +147,13 @@ function teleportRandom(sender, args) {
           }
           Location.add(0.5, 1, 0.5);
           player.teleport(Location);
+          timer = new Date().getTime() - timer;
+          console.log(
+            "[RTP] Player " +
+              player.name +
+              " teleport Loading chunk took " +
+              TimeCounter(parseInt(timer/1000))
+          );
         }, 20 * 5);
       }
     } else {
